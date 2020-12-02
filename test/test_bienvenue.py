@@ -28,5 +28,9 @@ def test_message_espace_inutiles():
     assert b.message("bob         ,amy") == "Hello, Bob and Amy."
     assert b.message("bob         ,amy,   PATRICK    ") == "Hello, Bob and Amy. AND HELLO, PATRICK !"
 
-
+def test_message_exclamation():
+    assert b.message("!bob,!amy,jerry") == "Hello, Jerry."
+    assert b.message("!bob,amy,!jerry") == "Hello, Amy."
+    assert b.message("bob,!bob,amy") == "Hello, Amy."
+    assert b.message("bob,!bob,amy,jerry,MICHEL,JEAN,!MICHEL") == "Hello, Amy and Jerry. AND HELLO, JEAN !"
 
