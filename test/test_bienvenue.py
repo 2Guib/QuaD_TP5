@@ -22,6 +22,11 @@ def test_message_noms_liste():
 def test_message_liste_avec_cris():
     assert b.message("Amy,BOB,jerry") == "Hello, Amy and Jerry. AND HELLO, BOB !"
     assert b.message("MICHEL,Amy,BOB,jerry") == "Hello, Amy and Jerry. AND HELLO, MICHEL AND BOB !"
+    assert b.message("MICHEL,Amy,BOB,jerry,PATRICK") == "Hello, Amy and Jerry. AND HELLO, MICHEL, BOB AND PATRICK !"
+
+def test_message_espace_inutiles():
+    assert b.message("bob         ,amy") == "Hello, Bob and Amy."
+    assert b.message("bob         ,amy,   PATRICK    ") == "Hello, Bob and Amy. AND HELLO, PATRICK !"
 
 
 
