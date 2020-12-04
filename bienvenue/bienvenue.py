@@ -1,45 +1,60 @@
+
+
+
 def message(noms):
     if len(noms.strip()) == 0:
         return "Hello, my friend."
 
     message = ""
 
-    tab_nom = tab_noms_min(noms)
-    tab_nom_maj = tab_noms_maj(noms)
+    dict_nom = tab_noms_min(noms)
+    dict_nom_maj = tab_noms_maj(noms)
 
-    if len(tab_nom) != 0:
+    if len(dict_nom) != 0:
         message += "Hello, "
-        if len(tab_nom) == 1:
-            message += tab_nom[0].title() + "."
+        list_nom = list(dict_nom.keys())
+        if len(dict_nom) == 1:
+            message += list_nom[0].title() + nbNom(dict_nom, list_nom[0]) +"."
         else:
-            for i in range(len(tab_nom)):
-                if i == len(tab_nom) - 1:
-                    message = message[0:-2] + " and " + tab_nom[i].title()
+            for i in range(len(dict_nom)):
+                if i == len(dict_nom) - 1:
+                    message = message[0:-2] + " and " + list_nom[i].title()
+                    message += nbNom(dict_nom, list_nom[i])
                 else:
-                    message += tab_nom[i].title() + ", "
+                    message += list_nom[i].title()
+                    message += nbNom(dict_nom, list_nom[i])
+                    message += ', '
             message += "."
 
-    if len(tab_nom_maj) != 0:
-        if len(tab_nom) == 0:
+    if len(dict_nom_maj) != 0:
+        list_nom_maj = list(dict_nom_maj.keys())
+        if len(dict_nom) == 0:
             message += "HELLO, "
         else:
             message += " AND HELLO, "
-        if len(tab_nom_maj) == 1:
-            message += tab_nom_maj[0] + " !"
+        if len(dict_nom_maj) == 1:
+            message += list_nom_maj[0] + nbNom(dict_nom_maj, list_nom_maj[0])+" !"
         else:
-            for i in range(len(tab_nom_maj)):
-                if i == len(tab_nom_maj) - 1:
-                    message = message[0:-2] + " AND " + tab_nom_maj[i]
+            for i in range(len(dict_nom_maj)):
+                if i == len(dict_nom_maj) - 1:
+                    message = message[0:-2] + " AND " + list_nom_maj[i]
+                    message += nbNom(dict_nom_maj, list_nom_maj[i])
                 else:
-                    message += tab_nom_maj[i] + ", "
+                    message += list_nom_maj[i]
+                    message += nbNom(dict_nom_maj, list_nom_maj[i])
+                    message += ', '
             message += " !"
 
     return message
 
+def nbNom(dict_nom, nom):
+    if (dict_nom[nom]>1):
+        return " (x"+str(dict_nom[nom])+")"
+    return ""
 
 def tab_noms_min(noms):
-    tab_nom = []
-    tab_nom_ingnore = []
+    dict_nom = {}
+    tab_nom_ignore = []
     nom = ""
     for i in range(len(noms)):
         if noms[i] == ',' or i == len(noms) - 1:
@@ -49,29 +64,30 @@ def tab_noms_min(noms):
 
             if nom != nom.upper():
                 if nom[0] == '!':
-                    tab_nom_ingnore.append(nom[1:].upper())
+                    tab_nom_ignore.append(nom[1:].upper())
                     nom = nom[1:]
-                tab_nom.append(nom)
+                if nom in dict_nom.keys():
+                    dict_nom[nom] += 1
+                else:
+                    dict_nom[nom] = 1
             nom = ""
         else:
             if noms[i] != " ":
                 nom += noms[i]
 
-
-    for ignore in tab_nom_ingnore:
+    for ignore in tab_nom_ignore:
         i = 0
-        while i < len(tab_nom):
-            if ignore == tab_nom[i].upper():
-                del tab_nom[i]
+        while i < len(dict_nom):
+            if ignore == list(dict_nom.keys())[i].upper():
+                del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
             i += 1
-
-    return tab_nom
+    return dict_nom
 
 
 def tab_noms_maj(noms):
-    tab_nom = []
-    tab_nom_ingnore = []
+    dict_nom = {}
+    tab_nom_ignore = []
     nom = ""
     for i in range(len(noms)):
         if noms[i] == ',' or i == len(noms) - 1:
@@ -81,21 +97,23 @@ def tab_noms_maj(noms):
 
             if nom == nom.upper():
                 if nom[0] == '!':
-                    tab_nom_ingnore.append(nom[1:].upper())
+                    tab_nom_ignore.append(nom[1:].upper())
                     nom = nom[1:].upper()
-                tab_nom.append(nom)
+                if nom in dict_nom.keys():
+                    dict_nom[nom] += 1
+                else:
+                    dict_nom[nom] = 1
             nom = ""
         else:
             if noms[i] != " ":
                 nom += noms[i]
 
-
-    for ignore in tab_nom_ingnore:
+    for ignore in tab_nom_ignore:
         i = 0
-        while i < len(tab_nom):
-            if ignore == tab_nom[i].upper():
-                del tab_nom[i]
+        while i < len(dict_nom):
+            if ignore == list(dict_nom.keys())[i].upper():
+                del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
             i += 1
 
-    return tab_nom
+    return dict_nom
