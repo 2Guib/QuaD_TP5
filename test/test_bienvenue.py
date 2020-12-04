@@ -44,6 +44,7 @@ def test_message_exclamation():
 
 def test_message_doulons_nom():
     assert b.message("bob,bob") == "Hello, Bob (x2)."
+    assert b.message("BOB,BOB") == "HELLO, BOB (x2) !"
     assert b.message("bob,jerry,amy,bob,amy,amy") == "Hello, Bob (x2), Jerry and Amy (x3)."
     assert b.message("bob,amy,bob") == "Hello, Bob (x2) and Amy."
     assert b.message("bob,amy,bob,!jerry,jerry") == "Hello, Bob (x2) and Amy."
@@ -67,3 +68,13 @@ def test_message_yoda():
 def test_message_yoda_plus_cinq():
     assert b.message("amy,Bob,yoda,max,MICHEL,denis") == "World, Hello !"
     assert b.message("AMY,BOB,YODA,MAX,MICHEL,DENIS") == "WORLD, HELLO !"
+
+def test_special_guest():
+    assert b.message("*bob*") == "Hello, our special guest Bob."
+    assert b.message("*BOB*") == "HELLO, OUR SPECIAL GUEST BOB !"
+    assert b.message("bob,*amy*,!amy") == "Hello, Bob."
+    assert b.message("bob,*AMY*,!AMY") == "Hello, Bob."
+    assert b.message("bob,*amy*,!AMY") == "Hello, Bob and our special guest Amy."
+    assert b.message("bob,*amy*,jerry") == "Hello, Bob, our special guest Amy and Jerry."
+    assert b.message("BOB,*AMY*,JERRY") == "HELLO, BOB, OUR SPECIAL GUEST AMY AND JERRY !"
+    assert b.message("*bob*,*AMY*,jerry") == "Hello, our special guest Bob and Jerry. AND HELLO, OUR SPECIAL GUEST AMY !"

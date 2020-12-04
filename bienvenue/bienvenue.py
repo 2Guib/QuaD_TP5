@@ -10,7 +10,6 @@ def message(noms):
     dict_nom_min = tab_noms_min(noms)
     dict_nom_maj = tab_noms_maj(noms)
 
-
     if not isYoda(dict_nom_min, dict_nom_maj):
         if len(dict_nom_min) == 0 and len(dict_nom_maj) > 5:
             return "HELLO, WORLD !"
@@ -48,9 +47,10 @@ def message(noms):
 
     return message
 
+def isGuest(nom):
+    return nom[0] == '*' and nom[len(nom) - 1] == '*'
 
 def isYoda(dict_nom_min, dict_nom_maj):
-
     for nom, nb in dict_nom_min.items():
         if nom.title() == "Yoda":
             return True
@@ -64,14 +64,24 @@ def getListeNomMin(dict_nom):
     message = ""
     list_nom = list(dict_nom.keys())
     if len(dict_nom) == 1:
-        message += list_nom[0].title() + nbNom(dict_nom, list_nom[0])
+        nom = list_nom[0].title()
+        if isGuest(nom):
+            nom = nom[1:]
+            nom = nom[:-1]
+            nom = "our special guest " + nom
+        message += nom + nbNom(dict_nom, list_nom[0])
     else:
         for i in range(len(dict_nom)):
+            nom = list_nom[i].title()
+            if isGuest(nom):
+                nom = nom[1:]
+                nom = nom[:-1]
+                nom = "our special guest " + nom
             if i == len(dict_nom) - 1:
-                message = message[0:-2] + " and " + list_nom[i].title()
+                message = message[0:-2] + " and " + nom
                 message += nbNom(dict_nom, list_nom[i])
             else:
-                message += list_nom[i].title()
+                message += nom
                 message += nbNom(dict_nom, list_nom[i])
                 message += ', '
     return message
@@ -81,14 +91,24 @@ def getListeNomMaj(dict_nom_maj):
     message = ""
     list_nom_maj = list(dict_nom_maj.keys())
     if len(dict_nom_maj) == 1:
-        message += list_nom_maj[0] + nbNom(dict_nom_maj, list_nom_maj[0])
+        nom = list_nom_maj[0]
+        if isGuest(nom):
+            nom = nom[1:]
+            nom = nom[:-1]
+            nom = "OUR SPECIAL GUEST " + nom
+        message += nom + nbNom(dict_nom_maj, list_nom_maj[0])
     else:
         for i in range(len(dict_nom_maj)):
+            nom = list_nom_maj[i]
+            if isGuest(nom):
+                nom = nom[1:]
+                nom = nom[:-1]
+                nom = "OUR SPECIAL GUEST " + nom
             if i == len(dict_nom_maj) - 1:
-                message = message[0:-2] + " AND " + list_nom_maj[i]
+                message = message[0:-2] + " AND " + nom
                 message += nbNom(dict_nom_maj, list_nom_maj[i])
             else:
-                message += list_nom_maj[i]
+                message += nom
                 message += nbNom(dict_nom_maj, list_nom_maj[i])
                 message += ', '
     return message
@@ -114,10 +134,10 @@ def tab_noms_min(noms):
                 if nom[0] == '!':
                     tab_nom_ignore.append(nom[1:].upper())
                     nom = nom[1:]
-                if nom in dict_nom.keys():
-                    dict_nom[nom] += 1
+                if nom.title() in dict_nom.keys():
+                    dict_nom[nom.title()] += 1
                 else:
-                    dict_nom[nom] = 1
+                    dict_nom[nom.title()] = 1
             nom = ""
         else:
             if noms[i] != " ":
@@ -126,7 +146,11 @@ def tab_noms_min(noms):
     for ignore in tab_nom_ignore:
         i = 0
         while i < len(dict_nom):
-            if ignore == list(dict_nom.keys())[i].upper():
+            nom = list(dict_nom.keys())[i].upper()
+            if isGuest(nom):
+                nom = nom[1:]
+                nom = nom[:-1]
+            if ignore == nom:
                 del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
             i += 1
@@ -159,9 +183,14 @@ def tab_noms_maj(noms):
     for ignore in tab_nom_ignore:
         i = 0
         while i < len(dict_nom):
-            if ignore == list(dict_nom.keys())[i].upper():
+            nom=list(dict_nom.keys())[i].upper()
+            if isGuest(nom):
+                nom = nom[1:]
+                nom = nom[:-1]
+            if ignore == nom:
                 del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
+
             i += 1
 
     return dict_nom
