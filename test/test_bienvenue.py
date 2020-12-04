@@ -69,7 +69,7 @@ def test_message_yoda_plus_cinq():
     assert b.message("amy,Bob,yoda,max,MICHEL,denis") == "World, Hello !"
     assert b.message("AMY,BOB,YODA,MAX,MICHEL,DENIS") == "WORLD, HELLO !"
 
-def test_special_guest():
+def test_message_special_guest():
     assert b.message("*bob*") == "Hello, our special guest Bob."
     assert b.message("*BOB*") == "HELLO, OUR SPECIAL GUEST BOB !"
     assert b.message("bob,*amy*,!amy") == "Hello, Bob."
@@ -78,3 +78,8 @@ def test_special_guest():
     assert b.message("bob,*amy*,jerry") == "Hello, Bob, our special guest Amy and Jerry."
     assert b.message("BOB,*AMY*,JERRY") == "HELLO, BOB, OUR SPECIAL GUEST AMY AND JERRY !"
     assert b.message("*bob*,*AMY*,jerry") == "Hello, our special guest Bob and Jerry. AND HELLO, OUR SPECIAL GUEST AMY !"
+
+def test_message_plusieur_guest():
+    assert b.message("jerry,*bob*") == "Hello, our special guest Bob, and Jerry."
+    assert b.message("*bob*,*amy*,jerry") == "Hello, our special guests Bob & Amy, and Jerry."
+    assert b.message("*bob*,*amy*,*BOB*,*JERRY*") == "Hello, our special guests Bob & Amy. AND HELLO, OUR SPECIAL GUESTS BOB & JERRY !"

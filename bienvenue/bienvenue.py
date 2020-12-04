@@ -50,6 +50,22 @@ def message(noms):
 def isGuest(nom):
     return nom[0] == '*' and nom[len(nom) - 1] == '*'
 
+def nbGuest(dict_nom):
+    compteur_guest = 0
+    for nom, nb in dict_nom.items():
+        if isGuest(nom):
+            compteur_guest += 1
+
+    return compteur_guest
+
+def clearGuest(nom):
+    if isGuest(nom):
+        nom = nom[1:]
+        nom = nom[:-1]
+
+    return nom
+
+
 def isYoda(dict_nom_min, dict_nom_maj):
     for nom, nb in dict_nom_min.items():
         if nom.title() == "Yoda":
@@ -71,19 +87,40 @@ def getListeNomMin(dict_nom):
             nom = "our special guest " + nom
         message += nom + nbNom(dict_nom, list_nom[0])
     else:
+        tab_guest = []
         for i in range(len(dict_nom)):
-            nom = list_nom[i].title()
-            if isGuest(nom):
-                nom = nom[1:]
-                nom = nom[:-1]
-                nom = "our special guest " + nom
-            if i == len(dict_nom) - 1:
-                message = message[0:-2] + " and " + nom
-                message += nbNom(dict_nom, list_nom[i])
+            if isGuest(list_nom[i]):
+                tab_guest.append(list_nom[i])
+        nb_guest = len(tab_guest)
+        if nb_guest > 0:
+            guest = tab_guest[0]
+            if nb_guest <= 1:
+                guest = clearGuest(guest)
+                message += "our special guest " + guest
             else:
-                message += nom
-                message += nbNom(dict_nom, list_nom[i])
-                message += ', '
+                message += "our special guests"
+                for guest in tab_guest:
+                    guest = clearGuest(guest)
+                    message += guest + " & "
+                message = message[:-3]
+            message += ', '
+        i = 0
+        while i < len(dict_nom) - nb_guest:
+            nom = list_nom[i]
+            if not isGuest(nom):
+                if i == len(dict_nom) - nb_guest - 1:
+                    if len(dict_nom) - nb_guest >1:
+                        message = message[0:-2]
+                    else:
+                        message = message[0:-1]
+                    message2 = message + " amd "
+                    message2 += nom
+                    message = message2+nbNom(dict_nom, list_nom[i])
+                else:
+                    message += nom
+                    message += nbNom(dict_nom, list_nom[i])
+                    message += ', '
+                i += 1
     return message
 
 
