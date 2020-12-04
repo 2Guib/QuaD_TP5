@@ -10,11 +10,12 @@ def message(noms):
     dict_nom_min = tab_noms_min(noms)
     dict_nom_maj = tab_noms_maj(noms)
 
-    if len(dict_nom_min) == 0 and len(dict_nom_maj) > 5:
-        return "HELLO, WORLD !"
-    if len(dict_nom_min) + len(dict_nom_maj) > 5:
-        return "Hello, world !"
+
     if not isYoda(dict_nom_min, dict_nom_maj):
+        if len(dict_nom_min) == 0 and len(dict_nom_maj) > 5:
+            return "HELLO, WORLD !"
+        if len(dict_nom_min) + len(dict_nom_maj) > 5:
+            return "Hello, world !"
         if len(dict_nom_min) != 0:
             message += "Hello, "
             message += getListeNomMin(dict_nom_min)
@@ -28,6 +29,10 @@ def message(noms):
             message += getListeNomMaj(dict_nom_maj)
             message += " !"
     else:
+        if len(dict_nom_min) == 0 and len(dict_nom_maj) > 5:
+            return "WORLD, HELLO !"
+        if len(dict_nom_min) + len(dict_nom_maj) > 5:
+            return "World, Hello !"
         if len(dict_nom_maj) != 0:
             inv_maj = OrderedDict(reversed(dict_nom_maj.items()))
             message += getListeNomMaj(inv_maj)
