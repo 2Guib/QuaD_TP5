@@ -83,3 +83,8 @@ def test_message_plusieur_guest():
     assert b.message("jerry,*bob*") == "Hello, our special guest Bob, and Jerry."
     assert b.message("*bob*,*amy*,jerry") == "Hello, our special guests Bob & Amy, and Jerry."
     assert b.message("*bob*,*amy*,*BOB*,*JERRY*") == "Hello, our special guests Bob & Amy. AND HELLO, OUR SPECIAL GUESTS BOB & JERRY !"
+
+def test_message_nom_guillemets():
+    assert b.message("\"Jean Denis\"") == "Hello, Jean Denis."
+    assert b.message("\"JEAN DENIS\"") == "HELLO, JEAN DENIS !"
+    assert b.message("Bob,\"Amy, Jerry\",\"JEAN DENIS\"") == "Hello, Bob and Amy, Jerry. AND HELLO, JEAN DENIS !"

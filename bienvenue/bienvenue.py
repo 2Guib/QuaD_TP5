@@ -86,8 +86,7 @@ def getListeNomMin(dict_nom):
     if nb_nom == 1:
         nom = list_nom[0].title()
         if isGuest(nom):
-            nom = nom[1:]
-            nom = nom[:-1]
+            nom = clearGuest(nom)
             nom = "our special guest " + nom
         message += nom + nbNom(dict_nom, list_nom[0])
     else:
@@ -191,10 +190,16 @@ def tab_noms_min(noms):
     dict_nom = {}
     tab_nom_ignore = []
     nom = ""
-    for i in range(len(noms)):
+    i=0
+    while i < len(noms):
+        if noms[i] == "\"":
+            i += 1
+            while noms[i] != "\"" and i < len(noms):
+                nom += noms[i]
+                i += 1
         if noms[i] == ',' or i == len(noms) - 1:
             if i == len(noms) - 1:
-                if noms[i] != " ":
+                if noms[i] != " " and noms[i] != "\"":
                     nom += noms[i]
 
             if nom != nom.upper():
@@ -207,16 +212,16 @@ def tab_noms_min(noms):
                     dict_nom[nom.title()] = 1
             nom = ""
         else:
-            if noms[i] != " ":
+            if noms[i] != " " and noms[i] != "\"":
                 nom += noms[i]
+        i += 1
 
     for ignore in tab_nom_ignore:
         i = 0
         while i < len(dict_nom):
             nom = list(dict_nom.keys())[i].upper()
             if isGuest(nom):
-                nom = nom[1:]
-                nom = nom[:-1]
+                nom = clearGuest(nom)
             if ignore == nom:
                 del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
@@ -228,10 +233,16 @@ def tab_noms_maj(noms):
     dict_nom = {}
     tab_nom_ignore = []
     nom = ""
-    for i in range(len(noms)):
+    i = 0
+    while i < len(noms):
+        if noms[i] == "\"":
+            i += 1
+            while noms[i] != "\"" and i < len(noms):
+                nom += noms[i]
+                i += 1
         if noms[i] == ',' or i == len(noms) - 1:
             if i == len(noms) - 1:
-                if noms[i] != " ":
+                if noms[i] != " " and noms[i] != "\"":
                     nom += noms[i]
 
             if nom == nom.upper():
@@ -244,16 +255,16 @@ def tab_noms_maj(noms):
                     dict_nom[nom] = 1
             nom = ""
         else:
-            if noms[i] != " ":
+            if noms[i] != " " and noms[i] != "\"":
                 nom += noms[i]
+        i += 1
 
     for ignore in tab_nom_ignore:
         i = 0
         while i < len(dict_nom):
             nom = list(dict_nom.keys())[i].upper()
             if isGuest(nom):
-                nom = nom[1:]
-                nom = nom[:-1]
+                nom = clearGuest(nom)
             if ignore == nom:
                 del dict_nom[list(dict_nom.keys())[i]]
                 i -= 1
