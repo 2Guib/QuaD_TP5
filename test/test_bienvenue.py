@@ -74,10 +74,10 @@ def test_message_special_guest():
     assert b.message("*BOB*") == "HELLO, OUR SPECIAL GUEST BOB !"
     assert b.message("bob,*amy*,!amy") == "Hello, Bob."
     assert b.message("bob,*AMY*,!AMY") == "Hello, Bob."
-    assert b.message("bob,*amy*,!AMY") == "Hello, Bob and our special guest Amy."
-    assert b.message("bob,*amy*,jerry") == "Hello, Bob, our special guest Amy and Jerry."
-    assert b.message("BOB,*AMY*,JERRY") == "HELLO, BOB, OUR SPECIAL GUEST AMY AND JERRY !"
-    assert b.message("*bob*,*AMY*,jerry") == "Hello, our special guest Bob and Jerry. AND HELLO, OUR SPECIAL GUEST AMY !"
+    assert b.message("bob,*amy*,!AMY") == "Hello, our special guest Amy, and Bob."
+    assert b.message("bob,*amy*,jerry") == "Hello, our special guest Amy, Bob and Jerry."
+    assert b.message("BOB,*AMY*,JERRY") == "HELLO, OUR SPECIAL GUEST AMY, BOB AND JERRY !"
+    assert b.message("*bob*,*AMY*,jerry") == "Hello, our special guest Bob, and Jerry. AND HELLO, OUR SPECIAL GUEST AMY !"
 
 def test_message_plusieur_guest():
     assert b.message("jerry,*bob*") == "Hello, our special guest Bob, and Jerry."

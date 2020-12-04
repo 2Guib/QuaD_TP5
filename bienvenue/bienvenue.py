@@ -47,8 +47,10 @@ def message(noms):
 
     return message
 
+
 def isGuest(nom):
     return nom[0] == '*' and nom[len(nom) - 1] == '*'
+
 
 def nbGuest(dict_nom):
     compteur_guest = 0
@@ -57,6 +59,7 @@ def nbGuest(dict_nom):
             compteur_guest += 1
 
     return compteur_guest
+
 
 def clearGuest(nom):
     if isGuest(nom):
@@ -79,7 +82,8 @@ def isYoda(dict_nom_min, dict_nom_maj):
 def getListeNomMin(dict_nom):
     message = ""
     list_nom = list(dict_nom.keys())
-    if len(dict_nom) == 1:
+    nb_nom = len(dict_nom)
+    if nb_nom == 1:
         nom = list_nom[0].title()
         if isGuest(nom):
             nom = nom[1:]
@@ -88,9 +92,10 @@ def getListeNomMin(dict_nom):
         message += nom + nbNom(dict_nom, list_nom[0])
     else:
         tab_guest = []
-        for i in range(len(dict_nom)):
+        for i in range(nb_nom):
             if isGuest(list_nom[i]):
                 tab_guest.append(list_nom[i])
+
         nb_guest = len(tab_guest)
         if nb_guest > 0:
             guest = tab_guest[0]
@@ -98,56 +103,81 @@ def getListeNomMin(dict_nom):
                 guest = clearGuest(guest)
                 message += "our special guest " + guest
             else:
-                message += "our special guests"
+                message += "our special guests "
                 for guest in tab_guest:
                     guest = clearGuest(guest)
                     message += guest + " & "
                 message = message[:-3]
             message += ', '
-        i = 0
-        while i < len(dict_nom) - nb_guest:
-            nom = list_nom[i]
-            if not isGuest(nom):
-                if i == len(dict_nom) - nb_guest - 1:
-                    if len(dict_nom) - nb_guest >1:
+        if nb_nom - nb_guest == 0:
+            message = message[0:-2]
+            return message
+        elif nb_nom - nb_guest == 1:
+            message += "and "
+            for i in range(nb_nom):
+                nom = list_nom[i]
+                if not isGuest(nom):
+                    message+=nom
+            return message
+        else:
+            for i in range(nb_nom):
+                nom = list_nom[i]
+                if not isGuest(nom):
+                    if i == nb_nom - 1:
                         message = message[0:-2]
+                        message += " and " + nom + nbNom(dict_nom, list_nom[i])
                     else:
-                        message = message[0:-1]
-                    message2 = message + " amd "
-                    message2 += nom
-                    message = message2+nbNom(dict_nom, list_nom[i])
-                else:
-                    message += nom
-                    message += nbNom(dict_nom, list_nom[i])
-                    message += ', '
-                i += 1
+                        message += nom +nbNom(dict_nom, list_nom[i])+', '
     return message
 
 
 def getListeNomMaj(dict_nom_maj):
     message = ""
-    list_nom_maj = list(dict_nom_maj.keys())
-    if len(dict_nom_maj) == 1:
-        nom = list_nom_maj[0]
+    list_nom = list(dict_nom_maj.keys())
+    nb_nom = len(dict_nom_maj)
+    if nb_nom == 1:
+        nom = list_nom[0]
         if isGuest(nom):
-            nom = nom[1:]
-            nom = nom[:-1]
-            nom = "OUR SPECIAL GUEST " + nom
-        message += nom + nbNom(dict_nom_maj, list_nom_maj[0])
+            nom = "OUR SPECIAL GUEST " + clearGuest(nom)
+        message += nom + nbNom(dict_nom_maj, list_nom[0])
     else:
-        for i in range(len(dict_nom_maj)):
-            nom = list_nom_maj[i]
-            if isGuest(nom):
-                nom = nom[1:]
-                nom = nom[:-1]
-                nom = "OUR SPECIAL GUEST " + nom
-            if i == len(dict_nom_maj) - 1:
-                message = message[0:-2] + " AND " + nom
-                message += nbNom(dict_nom_maj, list_nom_maj[i])
+        tab_guest = []
+        for i in range(nb_nom):
+            if isGuest(list_nom[i]):
+                tab_guest.append(list_nom[i])
+
+        nb_guest = len(tab_guest)
+        if nb_guest > 0:
+            guest = tab_guest[0]
+            if nb_guest <= 1:
+                guest = clearGuest(guest)
+                message += "OUR SPECIAL GUEST " + guest
             else:
-                message += nom
-                message += nbNom(dict_nom_maj, list_nom_maj[i])
-                message += ', '
+                message += "OUR SPECIAL GUESTS "
+                for guest in tab_guest:
+                    guest = clearGuest(guest)
+                    message += guest + " & "
+                message = message[:-3]
+            message += ', '
+        if nb_nom - nb_guest == 0:
+            message = message[0:-2]
+            return message
+        elif nb_nom - nb_guest == 1:
+            message += "AND "
+            for i in range(nb_nom):
+                nom = list_nom[i]
+                if not isGuest(nom):
+                    message += nom
+            return message
+        else:
+            for i in range(nb_nom):
+                nom = list_nom[i]
+                if not isGuest(nom):
+                    if i == nb_nom - 1:
+                        message = message[0:-2]
+                        message += " AND " + nom + nbNom(dict_nom_maj, list_nom[i])
+                    else:
+                        message += nom + nbNom(dict_nom_maj, list_nom[i]) + ', '
     return message
 
 
@@ -220,7 +250,7 @@ def tab_noms_maj(noms):
     for ignore in tab_nom_ignore:
         i = 0
         while i < len(dict_nom):
-            nom=list(dict_nom.keys())[i].upper()
+            nom = list(dict_nom.keys())[i].upper()
             if isGuest(nom):
                 nom = nom[1:]
                 nom = nom[:-1]
