@@ -49,3 +49,17 @@ def test_message_doulons_nom():
     assert b.message("bob,amy,bob,!jerry,jerry") == "Hello, Bob (x2) and Amy."
     assert b.message("bob,BOB,BOB,BOB,amy,BOB") == "Hello, Bob and Amy. AND HELLO, BOB (x4) !"
     assert b.message("bob,bob,BOB,BOB,BOB,amy,BOB") == "Hello, Bob (x2) and Amy. AND HELLO, BOB (x4) !"
+
+def test_message_plus_cinq_noms():
+
+    assert b.message("MICHEL,Amy,BOB,jerry,PATRICK,jack") == "Hello, world !"
+
+def test_message_plus_cinq_noms_MAJ():
+    assert b.message("MICHEL,AMY,BOB,JERRY,PATRICK,JACK") == "HELLO, WORLD !"
+    assert b.message("MICHEL,AMY,BOB,JERRY,PATRICK,JACK,denis") == "Hello, world !"
+
+def test_yoda():
+    assert b.message("amy,Bob,yoda,max") == "Max, Yoda, Bob and Amy, Hello."
+    assert b.message("amy,bob,YODA,JERRY") == "JERRY AND YODA, HELLO AND Bob and Amy, Hello."
+    assert b.message("JERRY,YODA,AMY") == "AMY, YODA AND JERRY, HELLO !"
+    assert b.message("amy,Bob,!yoda,max") == "Hello, Amy, Bob and Max."
